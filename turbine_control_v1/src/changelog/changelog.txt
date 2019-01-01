@@ -1,0 +1,7 @@
+****************************************************************
+-- Reaktor- und Turbinenprogramm von Powerman0815 --
+-- Komplettes Changelog --
+-- Aktuelle Version: 1.0 --
+****************************************************************
+Verion 1.0 (beta)
+- First Release (Beta-Stadium)
