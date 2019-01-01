@@ -51,6 +51,7 @@ function initPeripherals()
 			end
 		end
 	end
+end
 
 
 --- Start Programm -------------------------------------------------
