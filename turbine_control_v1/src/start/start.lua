@@ -29,7 +29,7 @@ touchpointLocation = {}
 
 function initPeripherals()
 	--Get all peripherals
-	local peripheralList = peripheral.getNames()
+	local peripheralList = components.getNames()
 	for i = 1, #peripheralList do
 		--Turbines
 		if peripheral.getType(peripheralList[i]) == "br_turbine" then
