@@ -32,14 +32,14 @@ function initPeripherals()
 	local peripheralList = peripheral.getNames()
 	for i = 1, #peripheralList do
 		--Turbines
-		if peripheral.getType(peripheralList[i]) == "BigReactors-Turbine" then
+		if peripheral.getType(peripheralList[i]) == "br_turbine" then
 			t[amountTurbines] = peripheral.wrap(peripheralList[i])
 			amountTurbines = amountTurbines + 1
 			--Reactor
-		elseif peripheral.getType(peripheralList[i]) == "BigReactors-Reactor" then
+		elseif peripheral.getType(peripheralList[i]) == "br_reactor" then
 			r = peripheral.wrap(peripheralList[i])
 			--Monitor & Touchpoint
-		elseif peripheral.getType(peripheralList[i]) == "monitor" then
+		elseif peripheral.getType(peripheralList[i]) == "screen" then
 			mon = peripheral.wrap(peripheralList[i])
 			touchpointLocation = peripheralList[i]
 			--Capacitorbank / Energycell / Energy Core
