@@ -54,5 +54,5 @@ end
 
 initPeripherals()
 
-os.execute("clear")
+--os.execute("clear")
 print("anzahl Turbinen: " .. amountTurbines)
