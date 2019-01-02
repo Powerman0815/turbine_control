@@ -77,7 +77,7 @@ function printStaticControlText()
 end
 
 function aktAnz()
-	gpu.set(30,10,rodLevel)
+	gpu.set(30,10,toint(rodLevel))
 	gpu.set(30,13,getSteam())
 end
 
