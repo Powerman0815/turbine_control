@@ -32,17 +32,17 @@ function initPeripherals()
 
 	for add, typ in component.list() do
 		if typ == "br_turbine" then
-			t[amountTurbines] = component.methods(add)
+			t[amountTurbines] = component.proxy(add)
 			amountTurbines = amountTurbines + 1
 		elseif typ == "br_reactor" then
-			r = component.methods(add)
+			r = component.proxy(add)
 			--Monitor & Touchpoint
 		elseif typ == "screen" then
-			mon = component.methods(add)
+			mon = component.proxy(add)
 			--touchpointLocation = peripheralList[i]
 			--Capacitorbank / Energycell / Energy Core
 		elseif typ == "energy_device" then
-			v = component.methods(add)
+			v = component.proxy(add)
 			print (v.getEnergyStored)
 		end
 	end
