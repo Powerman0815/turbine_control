@@ -43,7 +43,8 @@ function initPeripherals()
 			--Capacitorbank / Energycell / Energy Core
 		elseif typ == "energy_device" then
 			v = component.proxy(add)
-			print (v.getEnergyStored)
+			print (v.getEnergyStored())
+			print (v.getMaxEnergyStored())
 		end
 	end
 end
