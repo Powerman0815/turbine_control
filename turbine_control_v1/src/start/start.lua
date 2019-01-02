@@ -68,7 +68,7 @@ function setRod(setrodV)
 end
 
 function getSteam()
-	return r.getHotFluidProduceLastTick()
+	return r.getHotFluidProducedLastTick()
 end
 
 function printStaticControlText()
@@ -77,7 +77,7 @@ function printStaticControlText()
 end
 
 function aktAnz()
-	gpu.set(30,10,toint(rodLevel))
+	gpu.set(30,10,tostring(rodLevel))
 	gpu.set(30,13,getSteam())
 end
 
