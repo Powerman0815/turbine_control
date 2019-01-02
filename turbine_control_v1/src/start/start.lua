@@ -63,7 +63,7 @@ function setRod(setrodV)
 	elseif rodLevel<0 then
 		rodLevel = 0
 	end
-
+gpu.set(1,1,tostring(rodLevel))
 	r.setAllControllRodLevels(rodLevel)
 end
 
@@ -78,7 +78,7 @@ end
 
 function aktAnz()
 	gpu.set(30,10,tostring(rodLevel))
-	gpu.set(30,13,getSteam())
+	gpu.set(30,13,tostring(getSteam()))
 end
 
 --- Start Programm -------------------------------------------------
