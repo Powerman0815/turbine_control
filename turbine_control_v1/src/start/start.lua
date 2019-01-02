@@ -23,32 +23,27 @@ amountTurbines = 0
 --TouchpointLocation (same as the monitor)
 touchpointLocation = {}
 
-
+local component = require("component")
 
 --===== Initialization of all peripherals =====
 
 function initPeripherals()
 	--Get all peripherals
-	local peripheralList = components.getNames()
-	for i = 1, #peripheralList do
-		--Turbines
-		if peripheral.getType(peripheralList[i]) == "br_turbine" then
-			t[amountTurbines] = peripheral.wrap(peripheralList[i])
+
+	for add, typ in component.list() do
+		if typ == "br_turbine" then
+			t[amountTurbines] = component.methods(add)
 			amountTurbines = amountTurbines + 1
-			--Reactor
-		elseif peripheral.getType(peripheralList[i]) == "br_reactor" then
-			r = peripheral.wrap(peripheralList[i])
+		elseif typ == "br_reactor" then
+			r = component.methods(add)
 			--Monitor & Touchpoint
-		elseif peripheral.getType(peripheralList[i]) == "screen" then
-			mon = peripheral.wrap(peripheralList[i])
-			touchpointLocation = peripheralList[i]
+		elseif typ == "screen" then
+			mon = component.methods(add)
+			--touchpointLocation = peripheralList[i]
 			--Capacitorbank / Energycell / Energy Core
-		else
-			local tmp = peripheral.wrap(peripheralList[i])
-			local stat,err = pcall(function() tmp.getEnergyStored() end)
-			if stat then
-				v = tmp
-			end
+		elseif typ == "energy_device" then
+			v = component.methods(add)
+			print (v.getEnergyStored)
 		end
 	end
 end
