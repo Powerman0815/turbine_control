@@ -11,6 +11,7 @@ rodLevel = 0
 
 turbineTargetSpeed = 0
 targetSteam = 0
+getSteam = 0
 
 --Peripherals
 mon = "" --Monitor
@@ -24,7 +25,10 @@ amountTurbines = 0
 touchpointLocation = {}
 
 local component = require("component")
+local keyboard = require("keyboard")
+local event = require("event")
 
+gpu = component.gpu -- get primary gpu component
 --===== Initialization of all peripherals =====
 
 function initPeripherals()
@@ -49,11 +53,53 @@ function initPeripherals()
 	end
 end
 
+--- funktionen -----------------------------------------------------
+
+
+function setRod(setrodV)
+	rodLevel = rodLevel + setrodV
+	if rodLevel>100 then
+		rodLevel= 100
+	elseif rodLevel<0 then
+		rodLevel = 0
+	end
+
+	r.setAllControllRodLevels(rodLevel)
+end
+
+function getSteam()
+	return r.getHotFluidProduceLastTick()
+end
+
+function printStaticControlText()
+  gpu.set(10,10, "Rod Level")
+  gpu.set(10,13, "Dampferzeugung")
+end
+
+function aktAnz()
+	gpu.set(30,10,rodLevel)
+	gpu.set(30,13,getSteam())
+end
 
 --- Start Programm -------------------------------------------------
 
 
+
 initPeripherals()
 
---os.execute("clear")
-print("anzahl Turbinen: " .. amountTurbines)
+os.execute("clear")
+printStaticControlText()
+
+while event.pull(0.1, "interrupted") == nil do
+	aktAnz()
+  local event, address, arg1, arg2, arg3 = event.pull(1)
+  if type(address) == "string" and component.isPrimary(address) then
+    if event == "key_down" and arg2 == keyboard.keys.q then
+      os.exit()
+    elseif event == "key_down" and arg2 == keyboard.keys.up then
+			setRod(1)
+		elseif event == "key_down" and arg2 == keyboard.keys.down then
+			setRod(-1)
+		end
+	end
+end
