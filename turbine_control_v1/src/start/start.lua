@@ -76,14 +76,20 @@ function getSteam()
 	return r.getHotFluidProducedLastTick()
 end
 
+function getTemp()
+	return r.getFuelTemperature()
+end
+
 function printStaticControlText()
   gpu.set(10,10, "Rod Level")
   gpu.set(10,13, "Dampferzeugung")
+	gpu.set(10,16, "Temperatur")
 end
 
 function aktAnz()
 	gpu.set(30,10,tostring(rodLevel))
 	gpu.set(30,13,tostring(getSteam()))
+	gpu.set(30,16,tostring(getTemp()))
 end
 
 --- Start Programm -------------------------------------------------
