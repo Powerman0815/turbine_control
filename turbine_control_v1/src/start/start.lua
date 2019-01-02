@@ -63,8 +63,13 @@ function setRod(setrodV)
 	elseif rodLevel<0 then
 		rodLevel = 0
 	end
-gpu.set(1,1,tostring(rodLevel))
-	r.setAllControllRodLevels(rodLevel)
+
+	for key,value in pairs (r.getControlRodsLevels()) do
+		r.setControlRodLevel(key,rodLevel)
+	end
+
+
+--	r.setAllControllRodLevels(rodLevel)
 end
 
 function getSteam()
