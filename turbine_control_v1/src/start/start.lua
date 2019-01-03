@@ -138,6 +138,10 @@ initPeripherals()
 os.execute("clear")
 printStaticControlText()
 
+getTo99c()
+
+
+
 while event.pull(0.1, "interrupted") == nil do
 	aktAnz()
   local event, address, arg1, arg2, arg3 = event.pull(1)
