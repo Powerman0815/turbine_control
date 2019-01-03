@@ -58,10 +58,15 @@ function initPeripherals()
 end
 
 --- funktionen -----------------------------------------------------
+function monClear()
+	local w, h = gpu.getResolution()
+	gpu.fill(1, 1, w, h, " ") -- clears the screen
+end
+
 function getTo99c()
     gpu.setBackground(colors.black)
 --    gpu.setTextColor(textColor)
-    gpu.clear()
+    monClear()
     gpu.set(1, 1,"Bringe Reaktor unter 99 Grad...")
 
     --Disables reactor and turbines
@@ -148,6 +153,7 @@ while event.pull(0.1, "interrupted") == nil do
   if type(address) == "string" and component.isPrimary(address) then
     if event == "key_down" and arg2 == keyboard.keys.q then
       os.exit()
+			break
     elseif event == "key_down" and arg2 == keyboard.keys.up then
 			setRod(1)
 		elseif event == "key_down" and arg2 == keyboard.keys.down then
