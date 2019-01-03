@@ -33,20 +33,19 @@ gpu = component.gpu -- get primary gpu component
 local colors = { blue = 0x4286F4, purple = 0xB673d6, red = 0xC14141, green = 0xDA841,
   black = 0x000000, white = 0xFFFFFF, grey = 0x47494C, lightGrey = 0xBBBBBB}
 ---- Config----------------
-mainMenu = true,
-rodLevel = 0,
-targetSpeed = 2000,
-overallMode = "auto",
-reactorOffAt = 80,
-backgroundColor = 128,
-reactorOnAt = 50,
-targetSteam = 2000,
-turbineTargetSpeed = 1820,
-version = "2.6-release",
-textColor = 1,
-program = "turbine",
-turbineOnOff = "off",
-lang = "de",
+mainMenu = true
+rodLevel = 0
+targetSpeed = 2000
+overallMode = "auto"
+reactorOffAt = 80
+backgroundColor = 128
+reactorOnAt = 50
+targetSteam = 2000
+turbineTargetSpeed = 1820
+textColor = 1
+program = "turbine"
+turbineOnOff = "off"
+lang = "de"
 
 
 -----End Config------
