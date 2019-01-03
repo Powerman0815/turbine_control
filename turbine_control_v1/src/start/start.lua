@@ -32,7 +32,24 @@ gpu = component.gpu -- get primary gpu component
 
 local colors = { blue = 0x4286F4, purple = 0xB673d6, red = 0xC14141, green = 0xDA841,
   black = 0x000000, white = 0xFFFFFF, grey = 0x47494C, lightGrey = 0xBBBBBB}
+---- Config----------------
+mainMenu = true,
+rodLevel = 0,
+targetSpeed = 2000,
+overallMode = "auto",
+reactorOffAt = 80,
+backgroundColor = 128,
+reactorOnAt = 50,
+targetSteam = 2000,
+turbineTargetSpeed = 1820,
+version = "2.6-release",
+textColor = 1,
+program = "turbine",
+turbineOnOff = "off",
+lang = "de",
 
+
+-----End Config------
 --===== Initialization of all peripherals =====
 
 function initPeripherals()
@@ -63,12 +80,20 @@ function monClear()
 	local w, h = gpu.getResolution()
 	gpu.fill(1, 1, w, h, " ") -- clears the screen
 end
+
 function allTurbinesOn()
 	for i = 0 ,amountTurbines do
 		t[i].setActive(true)
 		t[i].setInductorEngaged(true)
 		t[i].setFluidFlowRateMax(2000) -- targetSteam
 	end
+end
+
+function allTurbinesOff()
+    for i = 0, amountTurbines, 1 do
+        t[i].setInductorEngaged(false)
+        t[i].setFluidFlowRateMax(0)
+    end
 end
 
 function getTo99c()
@@ -142,6 +167,121 @@ function aktAnz()
 	gpu.set(30,16,tostring(getTemp()))
 end
 
+
+function findOptimalFuelRodLevel()
+
+    --Load config?
+--    if not (math.floor(rodLevel) == 0) then
+--        r.setAllControlRodLevels(rodLevel)
+
+--    else
+        --Get reactor below 99c
+        getTo99c()
+
+        --Enable reactor + turbines
+        r.setActive(true)
+        allTurbinesOn()
+
+        --Calculation variables
+        local controlRodLevel = 99
+        local diff = 0
+        local targetSteamOutput = targetSteam * (amountTurbines + 1)
+        local targetLevel = 99
+
+        --Display
+--        term.setBackgroundColor(backgroundColor)
+--        mon.setTextColor(textColor)
+        monClear()
+
+        print("TargetSteam: " .. targetSteamOutput)
+
+            gpu.set(1, 1,"Finde optimales FuelRod Level...")
+            gpu.set(1, 3,"Berechne Level...")
+            gpu.set(1, 5,"Gesuchter Steam-Output: " .. (input.formatNumber(math.floor(targetSteamOutput))) .. "mb/t")
+
+        --Calculate Level based on 2 values
+        local failCounter = 0
+        while true do
+            r.setAllControlRodLevels(controlRodLevel)
+            os.sleep(2)
+            local steamOutput1 = r.getHotFluidProducedLastTick()
+            print("SO1: " .. steamOutput1)
+            r.setAllControlRodLevels(controlRodLevel - 1)
+            os.sleep(5)
+            local steamOutput2 = r.getHotFluidProducedLastTick()
+            print("SO2: " .. steamOutput2)
+            diff = steamOutput2 - steamOutput1
+            print("Diff: " .. diff)
+
+            targetLevel = 100 - math.floor(targetSteamOutput / diff)
+            print("Target: " .. targetLevel)
+
+            --Check target level
+            if targetLevel < 0 or targetLevel == "-inf" then
+
+                --Calculation failed 3 times?
+                if failCounter > 2 then
+                    gpu.setBackgroundColor(colors.black)
+                    monClear()
+                    gpu.setTextColor(colors.red)
+                    gpu.set(1, 1,"RodLevel-Berechnung fehlgeschlagen!")
+                    gpu.set(1, 2,"Berechnung waere < 0!")
+                    gpu.set(1, 3,"Bitte Steam/Wasser-Input pruefen!")
+
+                    --Disable reactor and turbines
+                    r.setActive(false)
+                    allTurbinesOff()
+                    for i = 1, amountTurbines do
+                        t[i].setActive(false)
+                    end
+
+
+                    term.clear()
+                    term.setCursor(1, 1)
+                    print("Target RodLevel: " .. targetLevel)
+                    error("Failed to calculate RodLevel!")
+
+                else
+                    failCounter = failCounter + 1
+                    os.sleep(2)
+                end
+
+                print("FailCounter: " .. failCounter)
+
+            else
+                break
+            end
+        end
+
+        --RodLevel calculation successful
+        print("RodLevel calculation successful!")
+        r.setAllControlRodLevels(targetLevel)
+        controlRodLevel = targetLevel
+
+        --Find precise level
+        while true do
+            os.sleep(5)
+            local steamOutput = r.getHotFluidProducedLastTick()
+
+            gpu.set(1, 3,"FuelRod Level: " .. controlRodLevel .. "  ")
+						gpu.set(1, 6,"Aktueller Steam-Output: " .. (input.formatNumber(steamOutput)) .. "mb/t    ")
+
+            --Level too big
+            if steamOutput < targetSteamOutput then
+                controlRodLevel = controlRodLevel - 1
+                r.setAllControlRodLevels(controlRodLevel)
+
+            else
+                r.setAllControlRodLevels(controlRodLevel)
+                rodLevel = controlRodLevel
+--                saveOptionFile()
+                print("Target RodLevel: " .. controlRodLevel)
+                os.sleep(2)
+                break
+            end --else
+        end --while
+--    end --else
+end
 --- Start Programm -------------------------------------------------
 
 
@@ -151,7 +291,8 @@ initPeripherals()
 os.execute("clear")
 printStaticControlText()
 
-getTo99c()
+--getTo99c()
+findOptimalFuelRodLevel()
 
 
 
