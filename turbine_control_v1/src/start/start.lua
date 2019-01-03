@@ -27,7 +27,7 @@ touchpointLocation = {}
 local component = require("component")
 local keyboard = require("keyboard")
 local event = require("event")
-
+term = require("term")
 gpu = component.gpu -- get primary gpu component
 
 local colors = { blue = 0x4286F4, purple = 0xB673d6, red = 0xC14141, green = 0xDA841,
