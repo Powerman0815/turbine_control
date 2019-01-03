@@ -62,6 +62,13 @@ function monClear()
 	local w, h = gpu.getResolution()
 	gpu.fill(1, 1, w, h, " ") -- clears the screen
 end
+function allTurbinesOn()
+	for i = 0 ,amountTurbines do
+		t[i].setActive(true)
+		t[i].setInductorEngaged(true)
+		t[i].setFluidFlowRateMax(2000) -- targetSteam
+	end
+end
 
 function getTo99c()
     gpu.setBackground(colors.black)
@@ -71,7 +78,7 @@ function getTo99c()
 
     --Disables reactor and turbines
     r.setActive(false)
---    allTurbinesOn()
+    allTurbinesOn()
 
     --Temperature variables
     local fTemp = r.getFuelTemperature()
@@ -80,7 +87,7 @@ function getTo99c()
 
     --Wait until both values are below 99
     while isNotBelow do
-        term.setCursorPos(1, 2)
+        term.setCursor(1, 2)
         print("CoreTemp: " .. fTemp .. "      ")
         print("CasingTemp: " .. cTemp .. "      ")
 
