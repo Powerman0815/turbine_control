@@ -196,7 +196,7 @@ function findOptimalFuelRodLevel()
 
             gpu.set(1, 1,"Finde optimales FuelRod Level...")
             gpu.set(1, 3,"Berechne Level...")
-            gpu.set(1, 5,"Gesuchter Steam-Output: " .. (input.formatNumber(math.floor(targetSteamOutput))) .. "mb/t")
+            gpu.set(1, 5,"Gesuchter Steam-Output: " .. (math.floor(targetSteamOutput)) .. "mb/t")
 
         --Calculate Level based on 2 values
         local failCounter = 0
@@ -263,7 +263,7 @@ function findOptimalFuelRodLevel()
             local steamOutput = r.getHotFluidProducedLastTick()
 
             gpu.set(1, 3,"FuelRod Level: " .. controlRodLevel .. "  ")
-						gpu.set(1, 6,"Aktueller Steam-Output: " .. (input.formatNumber(steamOutput)) .. "mb/t    ")
+						gpu.set(1, 6,"Aktueller Steam-Output: " .. (tostring(steamOutput)) .. "mb/t    ")
 
             --Level too big
             if steamOutput < targetSteamOutput then
