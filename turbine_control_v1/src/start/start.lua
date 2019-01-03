@@ -55,6 +55,7 @@ function initPeripherals()
 			print (v.getMaxEnergyStored())
 		end
 	end
+	amountTurbines = amountTurbines - 1
 end
 
 --- funktionen -----------------------------------------------------
