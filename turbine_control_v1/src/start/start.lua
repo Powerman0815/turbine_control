@@ -29,6 +29,10 @@ local keyboard = require("keyboard")
 local event = require("event")
 
 gpu = component.gpu -- get primary gpu component
+
+local colors = { blue = 0x4286F4, purple = 0xB673d6, red = 0xC14141, green = 0xDA841,
+  black = 0x000000, white = 0xFFFFFF, grey = 0x47494C, lightGrey = 0xBBBBBB}
+
 --===== Initialization of all peripherals =====
 
 function initPeripherals()
@@ -54,6 +58,39 @@ function initPeripherals()
 end
 
 --- funktionen -----------------------------------------------------
+function getTo99c()
+    gpu.setBackground(colors.black)
+--    gpu.setTextColor(textColor)
+    gpu.clear()
+    gpu.set(1, 1,"Bringe Reaktor unter 99 Grad...")
+
+    --Disables reactor and turbines
+    r.setActive(false)
+--    allTurbinesOn()
+
+    --Temperature variables
+    local fTemp = r.getFuelTemperature()
+    local cTemp = r.getCasingTemperature()
+    local isNotBelow = true
+
+    --Wait until both values are below 99
+    while isNotBelow do
+        term.setCursorPos(1, 2)
+        print("CoreTemp: " .. fTemp .. "      ")
+        print("CasingTemp: " .. cTemp .. "      ")
+
+        fTemp = r.getFuelTemperature()
+        cTemp = r.getCasingTemperature()
+
+        if fTemp < 99 then
+            if cTemp < 99 then
+                isNotBelow = false
+            end
+        end
+
+        os.sleep(1)
+    end --while
+end
 
 
 function setRod(setrodV)
